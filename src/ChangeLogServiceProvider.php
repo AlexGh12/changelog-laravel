@@ -40,6 +40,21 @@ class ChangeLogServiceProvider extends ServiceProvider
         });
     }
 
+	/**
+     * Get the Telescope route group configuration array.
+     *
+     * @return array
+     */
+    private function routeConfiguration()
+    {
+        return [
+            // 'domain' => config('ChangeLog.domain', null),
+            'namespace' => 'AlexGh12\ChangeLog\Http\Controllers',
+            'prefix' => config('ChangeLog.path'),
+            // 'middleware' => 'ChangeLog',
+        ];
+    }
+
     /**
      * Register the package's migrations.
      *
