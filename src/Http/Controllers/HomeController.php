@@ -15,7 +15,7 @@ class HomeController extends Controller
     public function index()
     {
         $param['string'] = $this->string;
-        return view('changelog::index', $param);
+        return view('ChangeLog::index', $param);
     }
 
     /**
@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function create()
     {
-        return view('changelog.create');
+        return view('ChangeLog::create');
     }
 
     /**
@@ -47,7 +47,7 @@ class HomeController extends Controller
      */
     public function edit(string $id)
     {
-        return view('changelog.edit');
+        return view('ChangeLog::edit');
     }
 
     /**
