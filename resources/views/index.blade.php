@@ -3,7 +3,7 @@
 @section('title', 'Index')
 
 @section('breadcrumb_btns')
-	<a href="{{ route('changelog.create') }}" class="btn btn-sm btn-success">
+	<a href="{{ route('version.create') }}" class="btn btn-sm btn-success">
 		<i class="bi bi-plus"></i>
 		Agregar changelog
 	</a>
@@ -15,7 +15,7 @@
 			<div class="accordion-item border-black @if ($i != 1) mt-3 border-top @endif">
 				<div class="accordion-header accordion-button @if ($i != 1) collapsed @endif" type="button" data-bs-toggle="collapse" data-bs-target="#item_{{ $i }}" aria-expanded="@if ($i == 1) true @else false @endif"  aria-controls="item_{{ $i }}">
 					<div class="position-absolute top-0 end-0 p-2">
-						<a href="{{ route('changelog.edit', $i) }}" class="btn btn-sm btn-info">
+						<a href="{{ route('version.edit', $i) }}" class="btn btn-sm btn-info">
 							<i class="bi bi-pencil-fill"></i>
 						</a>
 

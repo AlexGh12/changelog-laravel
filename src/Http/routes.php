@@ -2,5 +2,5 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/list', [HomeController::class, 'index']);
+Route::get('/', 'HomeController@index');
 Route::resource('/version', VersionController::class);

@@ -22,7 +22,7 @@
             <nav aria-label="breadcrumb" class="d-flex justify-content-between align-items-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="{{ route('changelog.index') }}">
+                        <a href="{{ route('version.index') }}">
                             {{ env('APP_NAME') }}
                         </a>
                     </li>

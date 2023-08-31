@@ -13,14 +13,14 @@
 @endsection
 
 @section('breadcrumb_btns')
-	<a href="{{ route('changelog.index') }}" class="btn btn-sm btn-secondary">
+	<a href="{{ route('version.index') }}" class="btn btn-sm btn-secondary">
 		<i class="bi bi-arrow-left"></i>
 		Regresar
 	</a>
 @endsection
 
 @section('content')
-	<form action="{{ route('changelog.store') }}" method="post" class="card card-body">
+	<form action="{{ route('version.store') }}" method="post" class="card card-body">
 		@csrf
 		<div class="mb-4">
 			<label for="version">
@@ -49,7 +49,7 @@
 			</div>
 		</div>
 		<div class="d-flex justify-content-around">
-			<a href="{{ route('changelog.index') }}" class="btn btn-sm btn-secondary">
+			<a href="{{ route('version.index') }}" class="btn btn-sm btn-secondary">
 				<i class="bi bi-arrow-left"></i>
 				Regresar
 			</a>
