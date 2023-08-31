@@ -2,7 +2,7 @@
 
 namespace AlexGh12\ChangeLog;
 
-use AlexGh12\ChangeLog\Console\database;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class ChangeLogServiceProvider extends ServiceProvider
