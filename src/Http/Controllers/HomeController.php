@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace AlexGh12\ChangeLog\Http\Controllers;
 
 use Illuminate\Http\Request;
 
