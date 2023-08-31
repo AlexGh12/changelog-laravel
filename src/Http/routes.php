@@ -2,4 +2,5 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::resource('/', HomeController::class)->name('changelog');
+Route::get('/list', [HomeController::class, 'index']);
+Route::resource('/version', VersionController::class);
