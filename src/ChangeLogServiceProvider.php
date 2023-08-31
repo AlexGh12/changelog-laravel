@@ -76,9 +76,9 @@ class ChangeLogServiceProvider extends ServiceProvider
     {
 
         if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__.'/../database/migrations' => database_path('migrations'),
-            ], 'changelog-migrations');
+            // $this->publishes([
+            //     __DIR__.'/../database/migrations' => database_path('migrations'),
+            // ], 'changelog-migrations');
 
             $this->publishes([
                 __DIR__.'/../config/ChngeLog.php' => config_path('ChngeLog.php'),
@@ -100,7 +100,7 @@ class ChangeLogServiceProvider extends ServiceProvider
 		if ($this->app->runningInConsole()) {
             $this->commands([
 				Commands\PublishCommand::class,
-				Commands\InstallCommand::class,
+				// Commands\InstallCommand::class,
             ]);
         }
     }
