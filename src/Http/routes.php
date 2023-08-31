@@ -2,4 +2,4 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/{view?}', 'HomeController@index')->where('view', '(.*)')->name('telescope');
+Route::get('/{view?}', 'HomeController@index')->where('view', '(.*)')->name('changelog');
