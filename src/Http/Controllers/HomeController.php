@@ -2,6 +2,7 @@
 
 namespace AlexGh12\ChangeLog\Http\Controllers;
 
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 
 class ChangeLogController extends Controller
