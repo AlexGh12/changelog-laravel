@@ -1,17 +1,17 @@
 <?php
 
-namespace Laravel\Telescope\Storage;
+namespace Laravel\changelog\Storage;
 
 use DateTimeInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Laravel\Telescope\Contracts\ClearableRepository;
-use Laravel\Telescope\Contracts\EntriesRepository as Contract;
-use Laravel\Telescope\Contracts\PrunableRepository;
-use Laravel\Telescope\Contracts\TerminableRepository;
-use Laravel\Telescope\EntryResult;
-use Laravel\Telescope\EntryType;
-use Laravel\Telescope\IncomingEntry;
+use Laravel\changelog\Contracts\ClearableRepository;
+use Laravel\changelog\Contracts\EntriesRepository as Contract;
+use Laravel\changelog\Contracts\PrunableRepository;
+use Laravel\changelog\Contracts\TerminableRepository;
+use Laravel\changelog\EntryResult;
+use Laravel\changelog\EntryType;
+use Laravel\changelog\IncomingEntry;
 
 class DatabaseEntriesRepository implements Contract, ClearableRepository, PrunableRepository, TerminableRepository
 {
@@ -56,13 +56,13 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
      * Find the entry with the given ID.
      *
      * @param  mixed  $id
-     * @return \Laravel\Telescope\EntryResult
+     * @return \Laravel\changelog\EntryResult
      */
     public function find($id): EntryResult
     {
         $entry = EntryModel::on($this->connection)->whereUuid($id)->firstOrFail();
 
-        $tags = $this->table('telescope_entries_tags')
+        $tags = $this->table('changelog_entries_tags')
                         ->where('entry_uuid', $id)
                         ->pluck('tag')
                         ->all();
@@ -83,13 +83,13 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
      * Return all the entries of a given type.
      *
      * @param  string|null  $type
-     * @param  \Laravel\Telescope\Storage\EntryQueryOptions  $options
-     * @return \Illuminate\Support\Collection|\Laravel\Telescope\EntryResult[]
+     * @param  \Laravel\changelog\Storage\EntryQueryOptions  $options
+     * @return \Illuminate\Support\Collection|\Laravel\changelog\EntryResult[]
      */
     public function get($type, EntryQueryOptions $options)
     {
         return EntryModel::on($this->connection)
-            ->withTelescopeOptions($type, $options)
+            ->withchangelogOptions($type, $options)
             ->take($options->limit)
             ->orderByDesc('sequence')
             ->get()->reject(function ($entry) {
@@ -111,12 +111,12 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
     /**
      * Counts the occurences of an exception.
      *
-     * @param  \Laravel\Telescope\IncomingEntry  $exception
+     * @param  \Laravel\changelog\IncomingEntry  $exception
      * @return int
      */
     protected function countExceptionOccurences(IncomingEntry $exception)
     {
-        return $this->table('telescope_entries')
+        return $this->table('changelog_entries')
                     ->where('type', EntryType::EXCEPTION)
                     ->where('family_hash', $exception->familyHash())
                     ->count();
@@ -125,7 +125,7 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
     /**
      * Store the given array of entries.
      *
-     * @param  \Illuminate\Support\Collection|\Laravel\Telescope\IncomingEntry[]  $entries
+     * @param  \Illuminate\Support\Collection|\Laravel\changelog\IncomingEntry[]  $entries
      * @return void
      */
     public function store(Collection $entries)
@@ -138,7 +138,7 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
 
         $this->storeExceptions($exceptions);
 
-        $table = $this->table('telescope_entries');
+        $table = $this->table('changelog_entries');
 
         $entries->chunk($this->chunkSize)->each(function ($chunked) use ($table) {
             $table->insert($chunked->map(function ($entry) {
@@ -154,16 +154,16 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
     /**
      * Store the given array of exception entries.
      *
-     * @param  \Illuminate\Support\Collection|\Laravel\Telescope\IncomingEntry[]  $exceptions
+     * @param  \Illuminate\Support\Collection|\Laravel\changelog\IncomingEntry[]  $exceptions
      * @return void
      */
     protected function storeExceptions(Collection $exceptions)
     {
         $exceptions->chunk($this->chunkSize)->each(function ($chunked) {
-            $this->table('telescope_entries')->insert($chunked->map(function ($exception) {
+            $this->table('changelog_entries')->insert($chunked->map(function ($exception) {
                 $occurrences = $this->countExceptionOccurences($exception);
 
-                $this->table('telescope_entries')
+                $this->table('changelog_entries')
                         ->where('type', EntryType::EXCEPTION)
                         ->where('family_hash', $exception->familyHash())
                         ->update(['should_display_on_index' => false]);
@@ -189,7 +189,7 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
     protected function storeTags(Collection $results)
     {
         $results->chunk($this->chunkSize)->each(function ($chunked) {
-            $this->table('telescope_entries_tags')->insert($chunked->flatMap(function ($tags, $uuid) {
+            $this->table('changelog_entries_tags')->insert($chunked->flatMap(function ($tags, $uuid) {
                 return collect($tags)->map(function ($tag) use ($uuid) {
                     return [
                         'entry_uuid' => $uuid,
@@ -203,7 +203,7 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
     /**
      * Store the given entry updates and return the failed updates.
      *
-     * @param  \Illuminate\Support\Collection|\Laravel\Telescope\EntryUpdate[]  $updates
+     * @param  \Illuminate\Support\Collection|\Laravel\changelog\EntryUpdate[]  $updates
      * @return \Illuminate\Support\Collection|null
      */
     public function update(Collection $updates)
@@ -211,7 +211,7 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
         $failedUpdates = [];
 
         foreach ($updates as $update) {
-            $entry = $this->table('telescope_entries')
+            $entry = $this->table('changelog_entries')
                             ->where('uuid', $update->uuid)
                             ->where('type', $update->type)
                             ->first();
@@ -226,7 +226,7 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
                 json_decode($entry->content ?? $entry['content'] ?? [], true) ?: [], $update->changes
             ));
 
-            $this->table('telescope_entries')
+            $this->table('changelog_entries')
                             ->where('uuid', $update->uuid)
                             ->where('type', $update->type)
                             ->update(['content' => $content]);
@@ -240,13 +240,13 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
     /**
      * Update tags of the given entry.
      *
-     * @param  \Laravel\Telescope\EntryUpdate  $entry
+     * @param  \Laravel\changelog\EntryUpdate  $entry
      * @return void
      */
     protected function updateTags($entry)
     {
         if (! empty($entry->tagsChanges['added'])) {
-            $this->table('telescope_entries_tags')->insert(
+            $this->table('changelog_entries_tags')->insert(
                 collect($entry->tagsChanges['added'])->map(function ($tag) use ($entry) {
                     return [
                         'entry_uuid' => $entry->uuid,
@@ -257,7 +257,7 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
         }
 
         collect($entry->tagsChanges['removed'])->each(function ($tag) use ($entry) {
-            $this->table('telescope_entries_tags')->where([
+            $this->table('changelog_entries_tags')->where([
                 'entry_uuid' => $entry->uuid,
                 'tag' => $tag,
             ])->delete();
@@ -300,7 +300,7 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
      */
     public function monitoring()
     {
-        return $this->table('telescope_monitoring')->pluck('tag')->all();
+        return $this->table('changelog_monitoring')->pluck('tag')->all();
     }
 
     /**
@@ -317,7 +317,7 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
             return;
         }
 
-        $this->table('telescope_monitoring')
+        $this->table('changelog_monitoring')
                     ->insert(collect($tags)
                     ->mapWithKeys(function ($tag) {
                         return ['tag' => $tag];
@@ -332,7 +332,7 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
      */
     public function stopMonitoring(array $tags)
     {
-        $this->table('telescope_monitoring')->whereIn('tag', $tags)->delete();
+        $this->table('changelog_monitoring')->whereIn('tag', $tags)->delete();
     }
 
     /**
@@ -343,7 +343,7 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
      */
     public function prune(DateTimeInterface $before)
     {
-        $query = $this->table('telescope_entries')
+        $query = $this->table('changelog_entries')
                 ->where('created_at', '<', $before);
 
         $totalDeleted = 0;
@@ -364,12 +364,12 @@ class DatabaseEntriesRepository implements Contract, ClearableRepository, Prunab
      */
     public function clear()
     {
-        $this->table('telescope_entries')->delete();
-        $this->table('telescope_monitoring')->delete();
+        $this->table('changelog_entries')->delete();
+        $this->table('changelog_monitoring')->delete();
     }
 
     /**
-     * Perform any clean-up tasks needed after storing Telescope entries.
+     * Perform any clean-up tasks needed after storing changelog entries.
      *
      * @return void
      */

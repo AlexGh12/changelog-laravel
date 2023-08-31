@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Telescope\Storage;
+namespace Laravel\changelog\Storage;
 
 use Illuminate\Http\Request;
 

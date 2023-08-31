@@ -1,10 +1,10 @@
 <?php
 
-namespace Laravel\Telescope\Storage;
+namespace Laravel\changelog\Storage;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Telescope\Database\Factories\EntryModelFactory;
+use Laravel\changelog\Database\Factories\EntryModelFactory;
 
 class EntryModel extends Model
 {
@@ -15,7 +15,7 @@ class EntryModel extends Model
      *
      * @var string
      */
-    protected $table = 'telescope_entries';
+    protected $table = 'changelog_entries';
 
     /**
      * The name of the "updated at" column.
@@ -59,10 +59,10 @@ class EntryModel extends Model
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string  $type
-     * @param  \Laravel\Telescope\Storage\EntryQueryOptions  $options
+     * @param  \Laravel\changelog\Storage\EntryQueryOptions  $options
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithTelescopeOptions($query, $type, EntryQueryOptions $options)
+    public function scopeWithchangelogOptions($query, $type, EntryQueryOptions $options)
     {
         $this->whereType($query, $type)
                 ->whereBatchId($query, $options)
@@ -94,7 +94,7 @@ class EntryModel extends Model
      * Scope the query for the given batch ID.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Laravel\Telescope\Storage\EntryQueryOptions  $options
+     * @param  \Laravel\changelog\Storage\EntryQueryOptions  $options
      * @return $this
      */
     protected function whereBatchId($query, EntryQueryOptions $options)
@@ -110,7 +110,7 @@ class EntryModel extends Model
      * Scope the query for the given type.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Laravel\Telescope\Storage\EntryQueryOptions  $options
+     * @param  \Laravel\changelog\Storage\EntryQueryOptions  $options
      * @return $this
      */
     protected function whereTag($query, EntryQueryOptions $options)
@@ -123,9 +123,9 @@ class EntryModel extends Model
             }
 
             return $query->whereIn('uuid', function ($query) use ($tags) {
-                $query->select('entry_uuid')->from('telescope_entries_tags')
+                $query->select('entry_uuid')->from('changelog_entries_tags')
                     ->whereIn('entry_uuid', function ($query) use ($tags) {
-                        $query->select('entry_uuid')->from('telescope_entries_tags')->whereIn('tag', $tags->all());
+                        $query->select('entry_uuid')->from('changelog_entries_tags')->whereIn('tag', $tags->all());
                     });
             });
         });
@@ -137,7 +137,7 @@ class EntryModel extends Model
      * Scope the query for the given type.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Laravel\Telescope\Storage\EntryQueryOptions  $options
+     * @param  \Laravel\changelog\Storage\EntryQueryOptions  $options
      * @return $this
      */
     protected function whereFamilyHash($query, EntryQueryOptions $options)
@@ -153,7 +153,7 @@ class EntryModel extends Model
      * Scope the query for the given pagination options.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Laravel\Telescope\Storage\EntryQueryOptions  $options
+     * @param  \Laravel\changelog\Storage\EntryQueryOptions  $options
      * @return $this
      */
     protected function whereBeforeSequence($query, EntryQueryOptions $options)
@@ -169,7 +169,7 @@ class EntryModel extends Model
      * Scope the query for the given display options.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Laravel\Telescope\Storage\EntryQueryOptions  $options
+     * @param  \Laravel\changelog\Storage\EntryQueryOptions  $options
      * @return $this
      */
     protected function filter($query, EntryQueryOptions $options)
@@ -190,7 +190,7 @@ class EntryModel extends Model
      */
     public function getConnectionName()
     {
-        return config('telescope.storage.database.connection');
+        return config('changelog.storage.database.connection');
     }
 
     /**
