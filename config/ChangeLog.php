@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'path' => env('CHANGELOG_PATH', 'changelog'),
+    'path' => env('CHANGELOG_PATH', '_changelog'),
 
     /*
     |--------------------------------------------------------------------------
