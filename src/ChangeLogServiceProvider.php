@@ -119,10 +119,10 @@ class ChangeLogServiceProvider extends ServiceProvider
 
 		config()->set('database.connections.changelogdb', [
             'driver' => 'sqlite',
-            'url' => config('Changelog.storage.database.changelogdb.url'),
-            'database' => config('Changelog.storage.database.changelogdb.database'),
-            'prefix' => config('Changelog.storage.database.changelogdb.prefix'),
-            'foreign_key_constraints' => config('Changelog.storage.database.changelogdb.foreign_key_constraints'),
+            'url' => config('ChangeLog.storage.database.changelogdb.url'),
+            'database' => config('ChangeLog.storage.database.changelogdb.database'),
+            'prefix' => config('ChangeLog.storage.database.changelogdb.prefix'),
+            'foreign_key_constraints' => config('ChangeLog.storage.database.changelogdb.foreign_key_constraints'),
         ]);
 
     }
