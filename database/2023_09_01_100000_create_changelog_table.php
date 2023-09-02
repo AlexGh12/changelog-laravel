@@ -24,9 +24,10 @@ return new class extends Migration
         $schema->create('changelog', function (Blueprint $table) {
             $table->id();
             $table->string('version');
-			$table->string('version');
+			$table->string('title');
+			$table->text('description');
             $table->longText('content');
-            $table->dateTime('created_at')->nullable();
+            $table->timestamps();
 
         });
     }
