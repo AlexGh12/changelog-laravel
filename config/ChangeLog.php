@@ -42,7 +42,13 @@ return [
 	'storage' => [
         'database' => [
             'connection' => env('CHANGELOG_DB_CONNECTION', 'changelogdb'),
-        ],
+			'changelogdb' => [ // driver:sqlite
+				'url' => env('CHANGELOG_DATABASE_URL'),
+				'database' => env('CHANGELOG_DB_DATABASE', database_path('changelog.sqlite')),
+				'prefix' => '',
+				'foreign_key_constraints' => env('CHANGELOG_DB_FOREIGN_KEYS', true),
+			],
+		],
     ],
 
 

@@ -22,7 +22,7 @@ class ChangeLogServiceProvider extends ServiceProvider
         }
 
 		$this->registerRoutes();
-
+		$this->registerMigrations();
 		$this->loadViewsFrom(
             __DIR__.'/../resources/views', 'ChangeLog'
         );
@@ -62,9 +62,9 @@ class ChangeLogServiceProvider extends ServiceProvider
      */
     private function registerMigrations()
     {
-        // if ($this->app->runningInConsole() && $this->shouldMigrate()) {
-        //     $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // }
+        if ($this->app->runningInConsole() && $this->shouldMigrate()) {
+            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        }
     }
 
     /**
@@ -117,9 +117,13 @@ class ChangeLogServiceProvider extends ServiceProvider
             __DIR__.'/../config/ChangeLog.php', 'ChangeLog',
         );
 
-		$this->mergeConfigFrom(
-			__DIR__.'/../config/database.ChangeLog.php', 'database.connections.ChangeLog'
-        );
+		config()->set('database.connections.changelog', [
+            'driver' => 'sqlite',
+            'url' => config('Changelog.storage.changelogdb.url'),
+            'database' => config('Changelog.storage.changelogdb.database'),
+            'prefix' => config('Changelog.storage.changelogdb.prefix'),
+            'foreign_key_constraints' => config('Changelog.storage.changelogdb.foreign_key_constraints'),
+        ]);
 
     }
 }

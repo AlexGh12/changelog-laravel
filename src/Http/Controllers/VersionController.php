@@ -4,6 +4,7 @@ namespace AlexGh12\ChangeLog\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class VersionController extends Controller
 {
@@ -20,8 +21,16 @@ class VersionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+
+		Validator::make($request->all(), [
+			'version' => 'required',
+			'content' => 'required',
+		])->validated();
+
+		$request->all()
+
         return view('ChangeLog::create');
     }
 
