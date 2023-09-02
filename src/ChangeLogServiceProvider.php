@@ -62,7 +62,7 @@ class ChangeLogServiceProvider extends ServiceProvider
      */
     private function registerMigrations()
     {
-        if ($this->app->runningInConsole() && $this->shouldMigrate()) {
+        if ($this->app->runningInConsole()) {
             $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         }
     }
