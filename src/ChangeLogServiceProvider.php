@@ -82,6 +82,7 @@ class ChangeLogServiceProvider extends ServiceProvider
 
             $this->publishes([
                 __DIR__.'/../config/ChngeLog.php' => config_path('ChngeLog.php'),
+				__DIR__.'/../config/database.ChngeLog.php' => config_path('database.ChngeLog.php'),
             ], 'changelog-config');
 
             // $this->publishes([
@@ -113,7 +114,11 @@ class ChangeLogServiceProvider extends ServiceProvider
     public function register()
     {
 		$this->mergeConfigFrom(
-            __DIR__.'/../config/ChangeLog.php', 'ChangeLog'
+            __DIR__.'/../config/ChangeLog.php', 'ChangeLog',
+        );
+
+		$this->mergeConfigFrom(
+			__DIR__.'/../config/database.ChangeLog.php', 'database.connections.ChangeLog'
         );
 
     }

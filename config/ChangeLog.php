@@ -28,5 +28,22 @@ return [
 
     'enabled' => env('ChangeLog_ENABLED', true),
 
+	/*
+	|--------------------------------------------------------------------------
+	| Configuración de almacenamiento
+	|--------------------------------------------------------------------------
+	|
+	| Estos son los observadores de ChangeLog que se registrarán cuando se active
+	| el interruptor maestro anterior. Puede agregar o quitar observadores de ChangeLog
+	| según sea necesario para su propia aplicación.
+	|
+	*/
+
+	'storage' => [
+        'database' => [
+            'connection' => env('CHANGELOG_DB_CONNECTION', 'changelogdb'),
+        ],
+    ],
+
 
 ];
