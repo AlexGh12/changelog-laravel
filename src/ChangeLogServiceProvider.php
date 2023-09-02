@@ -117,7 +117,7 @@ class ChangeLogServiceProvider extends ServiceProvider
             __DIR__.'/../config/ChangeLog.php', 'ChangeLog',
         );
 
-		config()->set('database.connections.changelog', [
+		config()->set('database.connections.changelogdb', [
             'driver' => 'sqlite',
             'url' => config('Changelog.storage.changelogdb.url'),
             'database' => config('Changelog.storage.changelogdb.database'),
