@@ -76,18 +76,16 @@ class ChangeLogServiceProvider extends ServiceProvider
     {
 
         if ($this->app->runningInConsole()) {
-            // $this->publishes([
-            //     __DIR__.'/../database/migrations' => database_path('migrations'),
-            // ], 'changelog-migrations');
+
+            $this->publishes([
+                __DIR__.'/../database/migrations' => database_path('migrations'),
+            ], 'changelog-migrations');
 
             $this->publishes([
                 __DIR__.'/../config/ChngeLog.php' => config_path('ChngeLog.php'),
 				__DIR__.'/../config/database.ChngeLog.php' => config_path('database.ChngeLog.php'),
             ], 'changelog-config');
 
-            // $this->publishes([
-            //     __DIR__.'/../stubs/ChangeLogServiceProvider.stub' => app_path('Providers/ChangeLogServiceProvider.php'),
-            // ], 'ChangeLog-provider');
         }
     }
 
