@@ -14,5 +14,6 @@ class PublishCommand extends Command
     public function handle()
     {
 		$this->call('vendor:publish', ['--tag' => 'ChangeLog:config', '--force' => true]);
+		//este es un comentario
     }
 }
