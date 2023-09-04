@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ChangeLog extends Model
 {
-	protected $table = '_changelog';
+	protected $table = 'changelog';
 	protected $connection = 'changelogdb';
 }
