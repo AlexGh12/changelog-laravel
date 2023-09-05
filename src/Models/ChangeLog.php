@@ -14,9 +14,9 @@ class ChangeLog extends Model
 	protected $connection = 'changelogdb';
 	protected $fillable = [	'version','title','description','content'];
 
-	public static function fetchAll()
+	public function fetchAll()
     {
-        return self::all();
+        return $this->all();
     }
 
     public static function fetchById($id)
