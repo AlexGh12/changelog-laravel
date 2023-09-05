@@ -3,7 +3,7 @@
 @section('title', 'Index')
 
 @section('breadcrumb_btns')
-	<a href="{{ route('version.create') }}" class="btn btn-sm btn-success">
+	<a class="btn btn-sm btn-success" href="{{ route('version.create') }}">
 		<i class="bi bi-plus"></i>
 		Agregar changelog
 	</a>
@@ -11,53 +11,70 @@
 
 @section('content')
 	<div class="accordion" id="changelog">
-		@for ($i = 1; $i <= 5; $i++)
-			<div class="accordion-item border-black @if ($i != 1) mt-3 border-top @endif">
-				<div class="accordion-header accordion-button @if ($i != 1) collapsed @endif" type="button" data-bs-toggle="collapse" data-bs-target="#item_{{ $i }}" aria-expanded="@if ($i == 1) true @else false @endif"  aria-controls="item_{{ $i }}">
-					<div class="position-absolute top-0 end-0 p-2">
-						<a href="{{ route('version.edit', $i) }}" class="btn btn-sm btn-info">
+		@foreach ($data as $log)
+			<div class="accordion-item @if ($loop->first) mt-3 border-top @endif border-black">
+				<div aria-controls="item_{{ $log->id }}"
+					aria-expanded="@if ($loop->first) true @else false @endif"
+					class="accordion-header accordion-button @if (!$loop->first) collapsed @endif"
+					data-bs-target="#item_{{ $log->id }}" data-bs-toggle="collapse" type="button">
+					<div class="position-absolute end-0 top-0 p-2">
+						<a class="btn btn-sm btn-info" href="{{ route('version.edit', $log->id) }}">
 							<i class="bi bi-pencil-fill"></i>
 						</a>
 
-						<button class="btn btn-sm btn-danger" onclick="deleteButton('item_{{ $i }}', 'Changelog {{ $i }}')">
+						<button class="btn btn-sm btn-danger"
+							onclick="deleteButton('item_{{ $log->id }}', 'Changelog {{ $log->id }}')">
 							<i class="bi bi-trash-fill"></i>
 						</button>
 					</div>
 					<div class="w-100">
 						<p class="h5">
-							v.{{ rand(1, 100) }}.{{ rand(1, 100) }}.{{ rand(1, 100) }}
+							{{ $log->version }}
 						</p>
 
-						<p class="h6 mt-3 text-muted">
-							Changelog {{ $i }}
-						</p>
-
-						<p>
-							{{ date('Y-m-d') }}
+						<p class="h6 text-muted mt-3">
+							{{ $log->title }}
 						</p>
 
 						<p>
-							{{ Str::limit($string, 120, '...') }}
+							{{ $log->created_at->format('Y-m-d') }}
+						</p>
+
+						<p>
+							{{ Str::limit($log->description, 120, '...') }}
 						</p>
 					</div>
 				</div>
-				<div id="item_{{ $i }}" class="accordion-collapse collapse @if ($i == 1) show @endif" data-bs-parent="#changelog">
+				<div class="accordion-collapse @if ($loop->first) show @endif collapse"
+					data-bs-parent="#changelog" id="item_{{ $log->id }}">
 					<div class="accordion-body">
-						<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+						{{ $log->description }}
 					</div>
 				</div>
 			</div>
-		@endfor
+		@endforeach
 	</div>
+
 @endsection
 
 @section('javascript')
 	<script>
+		@if (session('alert'))
+			let alert = @json(session('alert'));
 
-		const deleteButton = function (id, name) {
+			Swal.fire({
+				title: alert.status.charAt(0).toUpperCase() + alert.status.slice(
+					1),
+				text: alert.mensaje,
+				icon: alert.status,
+				confirmButtonText: 'Ok'
+			});
+		@endif
+
+		const deleteButton = function(id, name) {
 			Swal.fire({
 				title: 'Eliminar',
-				text: '¿Seguro que quieres eliminar "'+name+'"?',
+				text: '¿Seguro que quieres eliminar "' + name + '"?',
 				icon: 'warning',
 				showCancelButton: true,
 				confirmButtonColor: '#3085d6',
@@ -69,7 +86,7 @@
 						'Eliminado',
 						'El registro ha sido eliminado.',
 						'success'
-					)
+					);
 				}
 			})
 		}
