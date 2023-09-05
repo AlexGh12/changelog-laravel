@@ -2,9 +2,12 @@
 
 namespace AlexGh12\ChangeLog\Http\Controllers;
 
-use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use AlexGh12\ChangeLog\Models\ChangeLog;
 use Illuminate\Support\Facades\Validator;
+use AlexGh12\ChangeLog\Http\Requests\StoreChangesRequest;
+use AlexGh12\ChangeLog\Http\Requests\UpdateChangesRequest;
 
 class VersionController extends Controller
 {
@@ -15,7 +18,8 @@ class VersionController extends Controller
      */
     public function index()
     {
-        return redirect()->route('changelog');
+		$data = ChangeLog::fetchAll();
+        return redirect()->route('ChangeLog::index', ['data' => $data]);
     }
 
     /**
@@ -23,23 +27,22 @@ class VersionController extends Controller
      */
     public function create(Request $request)
     {
-
-		Validator::make($request->all(), [
-			'version' => 'required',
-			'content' => 'required',
-		])->validated();
-
-		$request->all()
-
-        return view('ChangeLog::create');
+		return view('ChangeLog::create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+  	public function store(StoreChangeRequest $request)
     {
-        //
+		$data = $request->all();
+        ChangeLog::storeNew($data);
+
+		session()->flash('alert', [
+        	'status'  => 'success',
+        	'mensaje' => 'Commit agregado exitosamente!',
+    	]);
+        return redirect()->route('version.index');
     }
 
     /**
@@ -55,15 +58,23 @@ class VersionController extends Controller
      */
     public function edit(string $id)
     {
-        return view('ChangeLog::edit');
+		$data = ChangeLog::fetchById($id);
+        return view('ChangeLog::edit', ['data' => $data]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateChangeRequest $request, $id)
     {
-        //
+        $change = ChangeLog::findOrFail($id);
+        $change->modify($request->all());
+
+		session()->flash('alert', [
+        	'status'  => 'success',
+        	'mensaje' => 'Commit actualizado exitosamente!',
+    	]);
+        return redirect()->route('version.index');
     }
 
     /**
@@ -71,6 +82,14 @@ class VersionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = ChangeLog::findOrFail($id);
+		$data->remove();
+
+		session()->flash('alert', [
+			'status'  => 'success',
+			'mensaje' => 'Commit eliminado exitosamente!',
+			'console' => 'Sin problema'
+   		]);
+		return redirect()->route('version.index');
     }
 }
