@@ -99,7 +99,7 @@ class ChangeLogServiceProvider extends ServiceProvider
 		if ($this->app->runningInConsole()) {
             $this->commands([
 				Commands\PublishCommand::class,
-				// Commands\InstallCommand::class,
+				Commands\InstallCommand::class,
             ]);
         }
     }
