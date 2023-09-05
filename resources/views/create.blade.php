@@ -24,29 +24,41 @@
 		@csrf
 		<div class="mb-4">
 			<label for="version">Versión</label>
-			<input class="form-control @error('version') is-invalid @enderror" id="version" name="version"
-				placeholder="v.{{ rand(1, 100) }}" type="text" value="{{ old('version') }}">
-			@error('version')
-				<div class="invalid-feedback">{{ $message }}</div>
-			@enderror
+			<input
+				class="form-control @isset($error)@error('version') is-invalid @enderror @endisset"
+				id="version" name="version" placeholder="v.{{ rand(1, 100) }}" type="text"
+				value="{{ old('version') }}">
+			@isset($error)
+				@error('version')
+					<div class="invalid-feedback">{{ $message }}</div>
+				@enderror
+			@endisset
 		</div>
 
 		<div class="mb-4">
 			<label for="title">Titulo</label>
-			<input class="form-control @error('title') is-invalid @enderror" id="title" name="title"
-				placeholder="Versión test" type="text" value="{{ old('title') }}">
-			@error('title')
-				<div class="invalid-feedback">{{ $message }}</div>
-			@enderror
+			<input
+				class="form-control @isset($error) @error('title') is-invalid @enderror @endisset"
+				id="title" name="title" placeholder="Versión test" type="text" value="{{ old('title') }}">
+			@isset($error)
+				@error('title')
+					<div class="invalid-feedback">{{ $message }}</div>
+				@enderror
+			@endisset
 		</div>
 
 		<div class="mb-4">
 			<label for="description">Descripción</label>
-			<input class="form-control @error('description') is-invalid @enderror" id="description" name="description"
-				placeholder="Descripción del cambio" type="text" value="{{ old('description') }}">
-			@error('description')
-				<div class="invalid-feedback">{{ $message }}</div>
-			@enderror
+			<input
+				class="form-control @isset($error)
+            @error('description') is-invalid @enderror @endisset"
+				id="description" name="description" placeholder="Descripción del cambio" type="text"
+				value="{{ old('description') }}">
+			@isset($error)
+				@error('description')
+					<div class="invalid-feedback">{{ $message }}</div>
+				@enderror
+			@endisset
 		</div>
 
 		<div class="mb-4">
