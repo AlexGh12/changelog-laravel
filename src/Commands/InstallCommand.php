@@ -27,7 +27,7 @@ class InstallCommand extends Command
     public function handle()
     {
 
-		$source = __DIR__."/../config/database/changelog.sqlite";
+		$source = __DIR__."../../database/changelog.sqlite";
 		$destination = database_path('changelog.sqlite');
 
 		if (copy($source, $destination)) {
