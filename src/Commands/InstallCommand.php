@@ -27,14 +27,7 @@ class InstallCommand extends Command
     public function handle()
     {
 
-		$source = __DIR__."../../database/changelog.sqlite";
-		$destination = database_path('changelog.sqlite');
-
-		if (copy($source, $destination)) {
-			$this->info("Archivo copiado con éxito.");
-		} else {
-			$this->info("Error al copiar el archivo.");
-		}
+		$this->call('vendor:publish', ['--tag' => 'changelog:db', '--force' => true]);
 
 		Artisan::call('migrate');
         $this->info('Migration generada exitosamente!');
