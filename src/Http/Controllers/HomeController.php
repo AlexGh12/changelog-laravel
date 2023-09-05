@@ -2,6 +2,7 @@
 
 namespace AlexGh12\ChangeLog\Http\Controllers;
 
+use AlexGh12\ChangeLog\Models\ChangeLog;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 
@@ -14,8 +15,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $param['string'] = $this->string;
-        return view('ChangeLog::index', $param);
+		$data = ChangeLog::fetchAll();
+        return view('ChangeLog::index', ['data' => $data]);
     }
 
 }

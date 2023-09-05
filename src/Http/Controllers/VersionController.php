@@ -18,8 +18,7 @@ class VersionController extends Controller
      */
     public function index()
     {
-		$data = ChangeLog::fetchAll();
-        return redirect()->route('ChangeLog::index', ['data' => $data]);
+        return redirect()->route('ChangeLog::index');
     }
 
     /**
