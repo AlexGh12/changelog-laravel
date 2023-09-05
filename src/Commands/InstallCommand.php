@@ -29,7 +29,7 @@ class InstallCommand extends Command
 
 		$this->call('vendor:publish', ['--tag' => 'changelog:db', '--force' => true]);
 
-		Artisan::call('migrate');
+		$this->call('migrate');
         $this->info('Migration generada exitosamente!');
     }
 }
