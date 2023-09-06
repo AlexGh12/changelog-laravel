@@ -102,7 +102,7 @@ class ChangeLogServiceProvider extends ServiceProvider
 				__DIR__.'/../database/migrations' => database_path('migrations'),
 			], 'changelog-db');
 			$this->publishes([
-				__DIR__.'/../database/file' => database_path(''),
+				__DIR__.'/../database/file' => database_path('changelog.sqlite'),
 			], 'changelog-db-file');
 			$this->publishes([
 				__DIR__.'/../config/ChngeLog.php' => config_path('ChngeLog.php'),
