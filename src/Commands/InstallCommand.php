@@ -27,7 +27,7 @@ class InstallCommand extends Command
     public function handle()
     {
 
-		$this->call('vendor:publish', ['--tag' => 'changelog:db', '--force' => true]);
+		$this->call('vendor:publish', ['--tag' => 'changelog-db', '--force' => true]);
 
 		$this->call('migrate');
         $this->info('Migration generada exitosamente!');
