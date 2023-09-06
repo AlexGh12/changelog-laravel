@@ -75,7 +75,7 @@
 		<div class="mb-4">
 			<label for="content">Contenido</label>
 			<div data-placeholder="Escribe algo aquí..." id="editor">
-				{{ old('editor_content', $data->editor_content) }}
+				{!! old('content', $data->content) !!}
 			</div>
 			<textarea id="editor_content" name="editor_content" style="display:none;"></textarea>
 		</div>
