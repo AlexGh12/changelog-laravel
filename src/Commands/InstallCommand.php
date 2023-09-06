@@ -26,14 +26,14 @@ class InstallCommand extends Command
      */
     public function handle()
     {
+		$this->call('vendor:publish', ['--tag' => 'changelog-db-file', '--force' => true]);
+		$this->info('Archivo SQLite generado exitosamente!');
 
 		$this->call('vendor:publish', ['--tag' => 'changelog-db', '--force' => true]);
-        $this->info('Migración creada exitosamente!');
+		$this->info('Migración creada exitosamente!');
 
-		$this->call('vendor:publish', ['--tag' => 'changelog-db-file', '--force' => true]);
-        $this->info('Archivo SQLite generado exitosamente!');
+		$this->call('migrate', ['--database' => 'changelogdb']);
+		$this->info('migración generada exitosamente!');
 
-		$this->call('migrate');
-        $this->info('Migration generada exitosamente!');
     }
 }
