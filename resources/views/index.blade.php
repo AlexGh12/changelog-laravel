@@ -48,7 +48,7 @@
 				<div class="accordion-collapse @if ($loop->first) show @endif collapse"
 					data-bs-parent="#changelog" id="item_{{ $log->id }}">
 					<div class="accordion-body">
-						{{ $log->description }}
+						{{ $log->content }}
 					</div>
 				</div>
 			</div>

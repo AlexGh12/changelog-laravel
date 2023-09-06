@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use AlexGh12\ChangeLog\Models\ChangeLog;
 use Illuminate\Support\Facades\Validator;
-use AlexGh12\ChangeLog\Http\Requests\StoreChangesRequest;
-use AlexGh12\ChangeLog\Http\Requests\UpdateChangesRequest;
 
 class VersionController extends Controller
 {
@@ -101,7 +99,7 @@ class VersionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateChangeRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'version'     => 'required|string|regex:/^v\.\d+$/',
