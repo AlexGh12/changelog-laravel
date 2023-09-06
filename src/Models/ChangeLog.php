@@ -26,7 +26,8 @@ class ChangeLog extends Model
 
 	public static function storeNew($data) {
 
-		$data['description'] = $data['editor_content'];
+		$data['content'] = $data['editor_content'];
+
     	return self::create($data);
 	}
 
@@ -36,6 +37,7 @@ class ChangeLog extends Model
         $this->version     = $data['version'];
         $this->title       = $data['title'];
         $this->description = $data['description'];
+        $this->content     = $data['editor_content'];
 		$this->save();
     }
 
