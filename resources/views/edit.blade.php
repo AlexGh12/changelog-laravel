@@ -20,40 +20,62 @@
 @endsection
 
 @section('content')
+	@php
+		if (session()->exists('error_changelog')) {
+		    dd(session('error_changelog'));
+		}
+	@endphp
+
 	<form action="{{ route('version.update', $data->id) }}" class="card card-body" method="post">
 		@csrf
 		@method('PUT')
 
 		<div class="mb-4">
 			<label for="version">Versión</label>
-			<input class="form-control" id="version" name="version" placeholder="v.{{ rand(1, 100) }}" type="text"
-				value="{{ old('version', $data->version) }}">
-			@error('version')
-				<div class="alert alert-danger">{{ $message }}</div>
-			@enderror
+			@isset($error['version'])
+				<input class="form-control is-invalid" id="version" name="version" placeholder="v.{{ rand(1, 100) }}"
+					type="text" value="{{ old('version', $data->version) }}">
+				<div class="invalid-feedback">
+					{{ $error['version'][0] }}
+				</div>
+			@else
+				<input class="form-control" id="version" name="version" placeholder="v.{{ rand(1, 100) }}" type="text"
+					value="{{ old('version', $data->version) }}">
+			@endisset
 		</div>
 
 		<div class="mb-4">
 			<label for="title">Titulo</label>
-			<input class="form-control" id="title" name="title" placeholder="Versión test" type="text"
-				value="{{ old('title', $data->title) }}">
-			@error('title')
-				<div class="alert alert-danger">{{ $message }}</div>
-			@enderror
+			@isset($error['title'])
+				<input class="form-control is-invalid" id="title" name="title" placeholder="Versión test"
+					type="text" value="{{ old('title', $data->title) }}">
+				<div class="invalid-feedback">
+					{{ $error['title'][0] }}
+				</div>
+			@else
+				<input class="form-control" id="title" name="title" placeholder="Versión test" type="text"
+					value="{{ old('title', $data->title) }}">
+			@endisset
 		</div>
 
 		<div class="mb-4">
 			<label for="description">Descripción</label>
-			<input class="form-control" id="description" name="description" placeholder="Descripción del cambio"
-				type="text" value="{{ old('description', $data->description) }}">
-			@error('description')
-				<div class="alert alert-danger">{{ $message }}</div>
-			@enderror
+			@isset($error['description'])
+				<input class="form-control is-invalid" id="description" name="description"
+					placeholder="Descripción del cambio" type="text" value="{{ old('description', $data->description) }}">
+				<div class="invalid-feedback">
+					{{ $error['description'][0] }}
+				</div>
+			@else
+				<input class="form-control" id="description" name="description" placeholder="Descripción del cambio"
+					type="text" value="{{ old('description', $data->description) }}">
+			@endisset
 		</div>
 
 		<div class="mb-4">
-			<div id="editor">
-				<p>{{ old('editor_content', $data->editor_content) }}</p>
+			<label for="content">Contenido</label>
+			<div data-placeholder="Escribe algo aquí..." id="editor">
+				{{ old('editor_content', $data->editor_content) }}
 			</div>
 			<textarea id="editor_content" name="editor_content" style="display:none;"></textarea>
 		</div>

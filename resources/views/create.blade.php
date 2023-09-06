@@ -20,51 +20,60 @@
 @endsection
 
 @section('content')
+
+	@php
+		if (session()->exists('error_changelog')) {
+		    dd(session('error_changelog'));
+		}
+	@endphp
+
 	<form action="{{ route('version.store') }}" class="card card-body" method="post">
 		@csrf
 		<div class="mb-4">
 			<label for="version">Versión</label>
-			<input
-				class="form-control @isset($error)@error('version') is-invalid @enderror @endisset"
-				id="version" name="version" placeholder="v.{{ rand(1, 100) }}" type="text"
-				value="{{ old('version') }}">
-			@isset($error)
-				@error('version')
-					<div class="invalid-feedback">{{ $message }}</div>
-				@enderror
+			@isset($error['version'])
+				<input class="form-control is-invalid" id="version" name="version" placeholder="v.{{ rand(1, 100) }}"
+					type="text" value="{{ old('version') }}">
+				<div class="invalid-feedback">
+					{{ $error['version'][0] }}
+				</div>
+			@else
+				<input class="form-control" id="version" name="version" placeholder="v.{{ rand(1, 100) }}" type="text"
+					value="{{ old('version') }}">
 			@endisset
 		</div>
 
 		<div class="mb-4">
 			<label for="title">Titulo</label>
-			<input
-				class="form-control @isset($error) @error('title') is-invalid @enderror @endisset"
-				id="title" name="title" placeholder="Versión test" type="text" value="{{ old('title') }}">
-			@isset($error)
-				@error('title')
-					<div class="invalid-feedback">{{ $message }}</div>
-				@enderror
+			@isset($error['title'])
+				<input class="form-control is-invalid" id="title" name="title" placeholder="Versión test"
+					type="text" value="{{ old('title') }}">
+				<div class="invalid-feedback">
+					{{ $error['title'][0] }}
+				</div>
+			@else
+				<input class="form-control" id="title" name="title" placeholder="Versión test" type="text"
+					value="{{ old('title') }}">
 			@endisset
 		</div>
 
 		<div class="mb-4">
 			<label for="description">Descripción</label>
-			<input
-				class="form-control @isset($error)
-            @error('description') is-invalid @enderror @endisset"
-				id="description" name="description" placeholder="Descripción del cambio" type="text"
-				value="{{ old('description') }}">
-			@isset($error)
-				@error('description')
-					<div class="invalid-feedback">{{ $message }}</div>
-				@enderror
+			@isset($error['description'])
+				<input class="form-control is-invalid" id="description" name="description"
+					placeholder="Descripción del cambio" type="text" value="{{ old('description') }}">
+				<div class="invalid-feedback">
+					{{ $error['description'][0] }}
+				</div>
+			@else
+				<input class="form-control" id="description" name="description" placeholder="Descripción del cambio"
+					type="text" value="{{ old('description') }}">
 			@endisset
 		</div>
 
 		<div class="mb-4">
-			<div id="editor">
-				<p>Aqui los detalles del cambiio</p>
-			</div>
+			<label for="content">Contenido</label>
+			<div data-placeholder="Escribe algo aquí..." id="editor"></div>
 			<textarea id="editor_content" name="editor_content" style="display:none;"></textarea>
 		</div>
 
@@ -146,8 +155,7 @@
 		});
 
 		document.querySelector('form').addEventListener('submit', function() {
-			var content = quill.root.innerHTML;
-			document.getElementById('editor_content').value = content;
+			document.querySelector('#editor_content').value = quill.root.innerHTML;
 		});
 	</script>
 @endsection
