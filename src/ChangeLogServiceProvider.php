@@ -72,27 +72,47 @@ class ChangeLogServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function registerPublishing()
-    {
+    // private function registerPublishing()
+    // {
 
-        if ($this->app->runningInConsole()) {
+    //     if ($this->app->runningInConsole()) {
 
-            $this->publishes([
-                __DIR__.'/../database/migrations' => database_path('migrations'),
-            ], 'changelog-migrations');
+    //         $this->publishes([
+    //             __DIR__.'/../database/migrations' => database_path('migrations'),
+    //         ], 'changelog-migrations');
+
+	// 		$this->publishes([
+    //             __DIR__.'/../database/file' => database_path(''),
+    //         ], 'changelog-db');
+
+
+    //         $this->publishes([
+    //             __DIR__.'/../config/ChngeLog.php' => config_path('ChngeLog.php'),
+	// 			__DIR__.'/../config/database.ChngeLog.php' => config_path('database.ChngeLog.php'),
+    //         ], 'changelog-config');
+
+    //     }
+    // }
+
+	private function registerPublishing()
+	{
+		if ($this->app->runningInConsole()) {
 
 			$this->publishes([
-                __DIR__.'/../database/file' => database_path(''),
-            ], 'changelog-db');
-
-
-            $this->publishes([
-                __DIR__.'/../config/ChngeLog.php' => config_path('ChngeLog.php'),
+				__DIR__.'/../database/migrations' => database_path('migrations'),
+			], 'changelog-db');
+			$this->publishes([
+				__DIR__.'/../database/file' => database_path(''),
+			], 'changelog-db-file');
+			$this->publishes([
+				__DIR__.'/../config/ChngeLog.php' => config_path('ChngeLog.php'),
 				__DIR__.'/../config/database.ChngeLog.php' => config_path('database.ChngeLog.php'),
-            ], 'changelog-config');
+			], 'changelog-config');
+		}
+	}
 
-        }
-    }
+
+
 
     /**
      * Register the package's commands.
