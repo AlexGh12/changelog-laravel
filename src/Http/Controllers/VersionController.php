@@ -11,14 +11,37 @@ use AlexGh12\ChangeLog\Http\Requests\UpdateChangesRequest;
 
 class VersionController extends Controller
 {
-    public $string = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate magnam voluptates libero minima aliquam ab aspernatur distinctio. Quasi dignissimos, magni commodi accusantium dolor deleniti sapiente corporis repellat quae et eveniet, earum neque, dolore vel. In quis, molestiae recusandae blanditiis voluptas non sunt eius expedita itaque reiciendis hic aliquam iusto soluta animi laudantium incidunt exercitationem reprehenderit amet laborum sapiente alias ad. Dolores cum ut cumque laborum expedita voluptas, ad vero nulla, modi pariatur labore doloremque veritatis aperiam eum quod dicta doloribus impedit reiciendis consequatur tenetur quos minus, est non. Delectus sapiente natus labore esse iste, optio tempore! Saepe pariatur ullam quibusdam assumenda vero exercitationem tempora voluptas, nam expedita quo! Dolor error necessitatibus dolorem doloremque placeat obcaecati tempore provident eveniet, sunt ratione et repellendus expedita vitae accusantium laborum labore dicta ipsum aliquam impedit, suscipit libero. Ut aspernatur dolore voluptates placeat dolores adipisci dolor veniam asperiores possimus suscipit, doloremque provident cum corporis deleniti similique itaque unde, eaque, eum inventore nesciunt. Dignissimos tempora, magnam facilis aliquid voluptas porro culpa similique eum excepturi, error assumenda blanditiis suscipit iste ea itaque nulla laboriosam, labore cum perferendis? Enim non laudantium, beatae vero laboriosam eligendi maxime expedita quo? Velit numquam ipsam ipsum unde, iusto laboriosam, harum et eos ut culpa suscipit dolorem doloribus molestias facilis accusantium cupiditate aut doloremque nihil laudantium. Ex culpa, iure fuga aliquid iusto id sint consequuntur minus ullam porro nemo pariatur recusandae officia dignissimos explicabo eligendi neque provident enim, repudiandae quas suscipit! Unde doloremque adipisci quis impedit quibusdam perspiciatis dolorem rerum quos dolore, officiis modi, neque et officia hic. Id praesentium quos fuga exercitationem facere temporibus officiis natus enim modi voluptates quas vero consectetur, inventore, molestias asperiores nostrum? Iste eum expedita culpa corrupti laudantium repellat quasi tenetur aliquid, aut eos perspiciatis explicabo accusamus. Facilis cupiditate possimus ducimus voluptatem a nesciunt dolor labore sint. Soluta odit tempore dicta, eaque aliquam recusandae dignissimos totam ut enim corrupti nihil commodi saepe vero ipsum doloremque explicabo. Ad, officiis. Voluptates, non! Eveniet labore laboriosam error quasi ducimus tenetur temporibus accusantium ea. Harum, molestiae sequi tempora vitae magni sit tempore ea nisi quam non quas ad iusto delectus possimus enim voluptates error impedit! Consequatur aliquam incidunt alias saepe ipsam voluptatibus iure veniam eaque tenetur perspiciatis reprehenderit cum laboriosam, nisi quo dicta. Tenetur tempora temporibus dignissimos nostrum! In, dicta pariatur porro dignissimos non aliquid at architecto eligendi maxime illo ullam iste, dolorem commodi iusto enim, quam sint voluptas nostrum incidunt sequi!';
+    public $string = 'Loremui!';
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return redirect()->route('ChangeLog::index');
+        if( isset($request->alert) ) {
+
+            switch ($request->alert) {
+                case '1':
+                    $status = 'éxito';
+                    $mensaje = 'Se guardo version existosamente';
+                break;
+                case '2':
+                    $status = 'éxito';
+                    $mensaje = 'Se actualizo version existosamente';
+                break;
+                case '3':
+                    $status = 'éxito';
+                    $mensaje = 'Se elimino version existosamente';
+                break;
+            }
+            session()->flash('alert', [
+                'status'  => $status,
+                'mensaje' => $mensaje,
+            ]);
+        }
+
+        $data = ChangeLog::fetchAll();
+        return view('ChangeLog::index', ['data' => $data]);
     }
 
     /**
@@ -26,22 +49,35 @@ class VersionController extends Controller
      */
     public function create(Request $request)
     {
+		session()->exists('error') ? session()->forget('error') : null;
 		return view('ChangeLog::create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-  	public function store(StoreChangeRequest $request)
+  	public function store(Request $request)
     {
+		$validator = Validator::make($request->all(), [
+            'version'     => 'required|string|regex:/^v\.\d+$/',
+            'title'       => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+        ],[
+            'version.required'     => 'El campo versión es requerido.',
+            'version.regex'        => 'El campo versión debe tener el formato "v.X" donde X es un número.',
+            'title.required'       => 'El campo título es requerido.',
+            'description.required' => 'El campo descripción es requerido.',
+        ]);
+
+        if($validator->fails()){
+            $params['error'] = $validator->errors()->toArray();
+            return view('ChangeLog::create',$params);
+        }
+
 		$data = $request->all();
         ChangeLog::storeNew($data);
 
-		session()->flash('alert', [
-        	'status'  => 'success',
-        	'mensaje' => 'Commit agregado exitosamente!',
-    	]);
-        return redirect()->route('version.index');
+        return redirect(route('version.index')."?alert=1");
     }
 
     /**
@@ -58,6 +94,7 @@ class VersionController extends Controller
     public function edit(string $id)
     {
 		$data = ChangeLog::fetchById($id);
+        session()->exists('error') ? session()->forget('error') : null;
         return view('ChangeLog::edit', ['data' => $data]);
     }
 
@@ -66,14 +103,28 @@ class VersionController extends Controller
      */
     public function update(UpdateChangeRequest $request, $id)
     {
-        $change = ChangeLog::findOrFail($id);
+        $validator = Validator::make($request->all(), [
+            'version'     => 'required|string|regex:/^v\.\d+$/',
+            'title'       => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+        ],[
+            'version.required'     => 'El campo versión es requerido.',
+            'version.regex'        => 'El campo versión debe tener el formato "v.X" donde X es un número.',
+            'title.required'       => 'El campo título es requerido.',
+            'description.required' => 'El campo descripción es requerido.',
+        ]);
+
+        if($validator->fails()){
+            $params['error'] = $validator->errors()->toArray();
+            return view('ChangeLog::edit',$params);
+        }
+
+	    $change = ChangeLog::findOrFail($id);
         $change->modify($request->all());
 
-		session()->flash('alert', [
-        	'status'  => 'success',
-        	'mensaje' => 'Commit actualizado exitosamente!',
-    	]);
-        return redirect()->route('version.index');
+        return redirect(route('version.index')."?alert=2");
+
+
     }
 
     /**
@@ -87,8 +138,8 @@ class VersionController extends Controller
 		session()->flash('alert', [
 			'status'  => 'success',
 			'mensaje' => 'Commit eliminado exitosamente!',
-			'console' => 'Sin problema'
    		]);
-		return redirect()->route('version.index');
+        return redirect(route('version.index')."?alert=3");
+
     }
 }
