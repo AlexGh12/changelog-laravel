@@ -41,9 +41,10 @@ class ChangeLog extends Model
 		$this->save();
     }
 
-    public function remove()
+    public static function remove(string $id): bool
     {
-        return $this->delete();
+        $data = self::findOrFail($id);
+        return $data->delete();
     }
 
 

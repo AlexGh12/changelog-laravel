@@ -23,9 +23,16 @@
 						</a>
 
 						<button class="btn btn-sm btn-danger"
-							onclick="deleteButton('item_{{ $log->id }}', 'Changelog {{ $log->id }}')">
+							onclick="deleteButton('delete-form-{{ $log->id }}', 'Changelog {{ $log->id }}')">
 							<i class="bi bi-trash-fill"></i>
 						</button>
+
+						<form action="{{ route('version.destroy', $log->id) }}" id="delete-form-{{ $log->id }}"
+							method="POST" style="display: none;">
+							@csrf
+							@method('DELETE')
+						</form>
+
 					</div>
 					<div class="w-100">
 						<p class="h5">
@@ -59,7 +66,7 @@
 
 @section('javascript')
 	<script>
-		const deleteButton = function(id, name) {
+		const deleteButton = function(formId, name) {
 			Swal.fire({
 				title: 'Eliminar',
 				text: '¿Seguro que quieres eliminar "' + name + '"?',
@@ -70,11 +77,7 @@
 				confirmButtonText: 'Si eliminar',
 			}).then((result) => {
 				if (result.isConfirmed) {
-					Swal.fire(
-						'Eliminado',
-						'El registro ha sido eliminado.',
-						'success'
-					);
+					document.getElementById(formId).submit();
 				}
 			})
 		}

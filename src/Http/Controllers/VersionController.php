@@ -130,8 +130,7 @@ class VersionController extends Controller
      */
     public function destroy(string $id)
     {
-        $data = ChangeLog::findOrFail($id);
-		$data->remove();
+        ChangeLog::remove($id);
 
 		session()->flash('alert', [
 			'status'  => 'success',
