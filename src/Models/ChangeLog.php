@@ -34,7 +34,7 @@ class ChangeLog extends Model
 
     public function modify($data)
     {
-        $this->version     = $data['version'];
+        $this->version     = 'v'. $data['version'];
         $this->title       = $data['title'];
         $this->description = $data['description'];
         $this->content     = $data['editor_content'];
