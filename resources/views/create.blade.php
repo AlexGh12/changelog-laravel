@@ -74,7 +74,8 @@
 		<div class="mb-4">
 			<label for="content">Contenido</label>
 			<div data-placeholder="Escribe algo aquí..." id="editor"></div>
-			<textarea id="editor_content" name="editor_content" style="display:none;"></textarea>
+			<textarea id="editor_content" name="editor_content" style="display:none;"
+			 value="{{ old('editor_content') }}"></textarea>
 		</div>
 
 		<div class="d-flex justify-content-around">
