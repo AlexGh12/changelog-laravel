@@ -2,6 +2,10 @@
 
 @section('title', 'Index')
 
+@section('css')
+	<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+@endsection
+
 @section('breadcrumb_btns')
 	<a class="btn btn-sm btn-success" href="{{ route('version.create') }}">
 		<i class="bi bi-plus"></i>
@@ -54,7 +58,7 @@
 				</div>
 				<div class="accordion-collapse @if ($loop->first) show @endif collapse"
 					data-bs-parent="#changelog" id="item_{{ $log->id }}">
-					<div class="accordion-body">
+					<div class="accordion-body ql-editor">
 						{!! $log->content !!}
 					</div>
 				</div>
