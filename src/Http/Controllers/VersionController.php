@@ -57,12 +57,12 @@ class VersionController extends Controller
   	public function store(Request $request)
     {
 		$validator = Validator::make($request->all(), [
-            'version'     => 'required|string|regex:/^v\.\d+$/',
+            'version'     => 'required|string',
             'title'       => 'required|string|max:255',
             'description' => 'required|string|max:1000',
         ],[
             'version.required'     => 'El campo versión es requerido.',
-            'version.regex'        => 'El campo versión debe ser un número.',
+            'version.regex'        => 'El campo versión debe tener el formato "v.X" donde X es un número.',
             'title.required'       => 'El campo título es requerido.',
             'description.required' => 'El campo descripción es requerido.',
         ]);
@@ -103,7 +103,7 @@ class VersionController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'version'     => 'required|string|regex:/^v\.\d+$/',
+            'version'     => 'required|string',
             'title'       => 'required|string|max:255',
             'description' => 'required|string|max:1000',
         ],[
@@ -114,7 +114,10 @@ class VersionController extends Controller
         ]);
 
         if($validator->fails()){
+            $data = ChangeLog::fetchById($id);
             $params['error'] = $validator->errors()->toArray();
+            $params['old'] = $request->all();
+            $params['data'] = $data;
             return view('ChangeLog::edit',$params);
         }
 
