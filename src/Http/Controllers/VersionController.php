@@ -57,12 +57,12 @@ class VersionController extends Controller
   	public function store(Request $request)
     {
 		$validator = Validator::make($request->all(), [
-            'version'     => 'required|string|regex:/^v\.\d+$/',
+            'version'     => 'required|numeric|regex:/^v\.\d+$/',
             'title'       => 'required|string|max:255',
             'description' => 'required|string|max:1000',
         ],[
             'version.required'     => 'El campo versión es requerido.',
-            'version.regex'        => 'El campo versión debe tener el formato "v.X" donde X es un número.',
+            'version.regex'        => 'El campo versión debe ser un número.',
             'title.required'       => 'El campo título es requerido.',
             'description.required' => 'El campo descripción es requerido.',
         ]);
