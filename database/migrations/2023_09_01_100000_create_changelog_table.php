@@ -21,16 +21,20 @@ return new class extends Migration
     {
         $schema = Schema::connection($this->getConnection());
 
-        $schema->create('changelog', function (Blueprint $table) {
-            $table->id();
-            $table->string('version');
-			$table->string('title');
-			$table->text('description');
-            $table->longText('content');
-			$table->softDeletes();
-            $table->timestamps();
+        $bd = $schema->getColumns('changelog');
 
-        });
+        if( count($bd) == 0 ){
+            $schema->create('changelog', function (Blueprint $table) {
+                $table->id();
+                $table->string('version');
+                $table->string('title');
+                $table->text('description');
+                $table->longText('content');
+                $table->softDeletes();
+                $table->timestamps();
+
+            });
+        }
     }
 
     /**
