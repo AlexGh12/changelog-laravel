@@ -27,7 +27,7 @@ class ChangeLog extends Model
 	public static function storeNew($data) {
 
 		$data['content'] = $data['editor_content'];
-
+		$data['version'] = 'v'. $data['version'];
     	return self::create($data);
 	}
 
