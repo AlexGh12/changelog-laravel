@@ -56,6 +56,8 @@ class VersionController extends Controller
      */
   	public function store(Request $request)
     {
+        $this->validateGroup();
+
 		$validator = Validator::make($request->all(), [
             'version'     => 'required|string',
             'title'       => 'required|string|max:255',
@@ -102,6 +104,8 @@ class VersionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validateGroup();
+
         $validator = Validator::make($request->all(), [
             'version'     => 'required|string',
             'title'       => 'required|string|max:255',
@@ -142,5 +146,22 @@ class VersionController extends Controller
    		]);
         return redirect(route('version.index')."?alert=3");
 
+    }
+
+    private function validateGroup()
+    {
+        $archivo = base_path('database/changelog.sqlite');
+        $grupo_nombre = posix_getgrgid(filegroup($archivo))['name'];
+
+        if ( $grupo_nombre != 'www-data' ) {
+            // Cambiamos el grupo del archivo
+            try {
+                if (!chgrp($archivo, 'www-data')) {
+                    throw new \Exception("Fallo al cambiar el grupo.");
+                }
+            } catch (\Exception $e) {
+                throw new \Exception("Ejecuta en raiz del proyecto: [ sudo chown :www-data database/changelog.sqlite ]");
+            }
+        }
     }
 }
