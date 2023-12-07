@@ -32,50 +32,43 @@
 		<div class="mb-4">
 			<label for="version">Versión</label>
 			@isset($error['version'])
-				<input class="form-control is-invalid" id="version" name="version" placeholder="v.{{ rand(1, 100) }}"
-					type="text" value="{{ old('version') }}">
+				<input class="form-control is-invalid" id="version" name="version" placeholder="v.{{ rand(1, 100) }}" type="text" value="{{ $old['version'] }}">
 				<div class="invalid-feedback">
 					{{ $error['version'][0] }}
 				</div>
 			@else
-				<input class="form-control" id="version" name="version" placeholder="v.{{ rand(1, 100) }}" type="text"
-					value="{{ old('version') }}">
+				<input class="form-control" id="version" name="version" placeholder="v.{{ rand(1, 100) }}" type="text" value="{{ $old['version'] ?? '' }}">
 			@endisset
 		</div>
 
 		<div class="mb-4">
 			<label for="title">Titulo</label>
 			@isset($error['title'])
-				<input class="form-control is-invalid" id="title" name="title" placeholder="Versión test"
-					type="text" value="{{ old('title') }}">
+				<input class="form-control is-invalid" id="title" name="title" placeholder="Versión test" type="text" value="{{ $old['title'] }}">
 				<div class="invalid-feedback">
 					{{ $error['title'][0] }}
 				</div>
 			@else
-				<input class="form-control" id="title" name="title" placeholder="Versión test" type="text"
-					value="{{ old('title') }}">
+				<input class="form-control" id="title" name="title" placeholder="Versión test" type="text" value="{{ $old['title'] ?? '' }}">
 			@endisset
 		</div>
 
 		<div class="mb-4">
 			<label for="description">Descripción</label>
 			@isset($error['description'])
-				<input class="form-control is-invalid" id="description" name="description"
-					placeholder="Descripción del cambio" type="text" value="{{ old('description') }}">
+				<input class="form-control is-invalid" id="description" name="description" placeholder="Descripción del cambio" type="text" value="{{ $old['description'] }}">
 				<div class="invalid-feedback">
 					{{ $error['description'][0] }}
 				</div>
 			@else
-				<input class="form-control" id="description" name="description" placeholder="Descripción del cambio"
-					type="text" value="{{ old('description') }}">
+				<input class="form-control" id="description" name="description" placeholder="Descripción del cambio" type="text" value="{{ $old['description'] ?? '' }}">
 			@endisset
 		</div>
 
 		<div class="mb-4">
 			<label for="content">Contenido</label>
 			<div data-placeholder="Escribe algo aquí..." id="editor"></div>
-			<textarea id="editor_content" name="editor_content" style="display:none;"
-			 value="{{ old('editor_content') }}"></textarea>
+			<textarea id="editor_content" name="editor_content" style="display:none;"></textarea>
 		</div>
 
 		<div class="d-flex justify-content-around">
@@ -151,12 +144,16 @@
 			modules: {
 				toolbar: toolbarOptions
 			},
-
 			theme: 'snow'
 		});
 
 		document.querySelector('form').addEventListener('submit', function() {
 			document.querySelector('#editor_content').value = quill.root.innerHTML;
 		});
+
+        @isset($error)
+            quill.root.innerHTML = "{!! $old['editor_content'] !!}"
+        @endisset
+
 	</script>
 @endsection
