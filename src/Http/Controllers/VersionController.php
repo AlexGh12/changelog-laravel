@@ -57,7 +57,7 @@ class VersionController extends Controller
   	public function store(Request $request)
     {
 		$validator = Validator::make($request->all(), [
-            'version'     => 'required',
+            'version'     => 'required|string|regex:/^v\.\d+$/',
             'title'       => 'required|string|max:255',
             'description' => 'required|string|max:1000',
         ],[
