@@ -35,10 +35,6 @@ Para finalizar la intalación hay que ejecutar las migraciones
 php artisan migrate
 ```
 
-## Configuración
-
-Puedes realizar las configuraciones desde el archivo `config/ChangeLog.php`
-
 ## Uso
 
 ### Registrar cambios
@@ -51,8 +47,13 @@ php artisan serve
 
 Ahora visitar [http://localhost:8000/changelog/](http://localhost:8000/changelog/)
 
-<!-- Todo: Agregar imagen --> 
+<p align="center"><img src="art/preview.png" alt="preview.png"></p>
 
+## Configuración
+
+Puedes realizar las configuraciones desde el archivo `config/ChangeLog.php`
+
+<!-- Todo: hacer funcionar esta parte
 ### Generar CHANGELOG.md
 
 Una ves registrados los cambios puedes generar el archivo `CHANGELOG.md` con:
@@ -60,6 +61,7 @@ Una ves registrados los cambios puedes generar el archivo `CHANGELOG.md` con:
 ```bash
 php artisan ChangeLog:generate
 ```
+-->
 
 
 ## Licencia
