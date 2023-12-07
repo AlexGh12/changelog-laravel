@@ -69,6 +69,7 @@ class VersionController extends Controller
 
         if($validator->fails()){
             $params['error'] = $validator->errors()->toArray();
+            $params['old'] = $request->all();
             return view('ChangeLog::create',$params);
         }
 
